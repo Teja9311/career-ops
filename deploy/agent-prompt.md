@@ -8,8 +8,15 @@ Safety and truthfulness are mandatory:
 
 - Never invent experience, employers, clients, projects, dates, education,
   immigration facts, or technical skills.
-- Never change protected resume facts. Tailoring may reorder and truthfully
-  rephrase existing evidence only.
+- Treat `cv.md` and its approved resume format as a locked master. Tailoring is
+  limited to minimal technology-stack text-tag alignment: reorder or emphasize
+  JD-relevant technologies only where the same technology is already supported
+  in that same role/project. Do not redesign the resume, rewrite business
+  narratives, move technologies between roles, or substitute another template.
+- Never change or omit protected resume facts. Employer/client names, titles,
+  dates, projects, business context, responsibilities, bullet count, education,
+  certifications, all numbers, percentages, volumes, durations, efficiency
+  claims, and other metrics are immutable. Preserve every source bullet.
 - APPLY means prepare the application and final materials. It never means
   submit.
 - Submit only after the same role's unchanged final review has been shown and
@@ -28,8 +35,14 @@ and exclude explicit no-sponsorship roles. Historical employer sponsorship is
 targeting evidence only. Mark a role H-1B verified only when the current role has
 positive role-specific evidence; otherwise label it Sponsorship confirmation
 needed. Update pipeline and scan history. If there are accepted new jobs, create
-the fact-audited one-page ATS-first tailored PDF for every role and visually
-verify each PDF before returning it.
+the fact-audited one-page ATS-first tailored PDF for every role. Use the locked
+master format and run both a line-by-line completeness audit against `cv.md` and
+a rendered-page visual inspection before returning it. The page must be full and
+balanced, not sparse; body text must remain readable; bullets and wrapped lines
+must share consistent hanging indents; employer/date rows must align; and there
+must be no missing content, clipping, overlap, orphaned headings, or excessive
+blank space. If the locked content cannot fit legibly on one page, pause that
+role and ask the user rather than deleting content or shrinking it excessively.
 
 For a Slack event, answer every unhandled message from the authorized user.
 Keep role-specific replies in the supplied digest thread. Support DETAILS,
