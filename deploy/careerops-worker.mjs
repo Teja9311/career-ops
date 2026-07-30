@@ -205,27 +205,49 @@ async function uploadFile(file, threadTs) {
   const ticket = await slack("files.getUploadURLExternal", {
     filename: path.basename(absolute),
     length: bytes.length,
+  }, { form: true });
+  const upload = await fetch(ticket.upload_url, {
+    method: "POST",
+    headers: { "content-type": "application/octet-stream" },
+    body: bytes,
   });
-  const upload = await fetch(ticket.upload_url, { method: "POST", body: bytes });
   if (!upload.ok) throw new Error(`Slack file upload failed: ${upload.status}`);
   await slack("files.completeUploadExternal", {
     files: [{ id: ticket.file_id, title: file.title }],
     channel_id: env.channel,
     thread_ts: threadTs,
-  });
+  }, { form: true });
 }
 
-async function slack(method, body) {
+async function slack(method, body, { form = false } = {}) {
+  const headers = { authorization: `Bearer ${env.slackToken}` };
+  let payload;
+  if (form) {
+    headers["content-type"] = "application/x-www-form-urlencoded; charset=utf-8";
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(body)) {
+      params.set(
+        key,
+        typeof value === "object" ? JSON.stringify(value) : String(value),
+      );
+    }
+    payload = params.toString();
+  } else {
+    headers["content-type"] = "application/json; charset=utf-8";
+    payload = JSON.stringify(body);
+  }
   const response = await fetch(`https://slack.com/api/${method}`, {
     method: "POST",
-    headers: {
-      authorization: `Bearer ${env.slackToken}`,
-      "content-type": "application/json; charset=utf-8",
-    },
-    body: JSON.stringify(body),
+    headers,
+    body: payload,
   });
   const data = await response.json();
-  if (!response.ok || !data.ok) throw new Error(`Slack ${method}: ${data.error || response.status}`);
+  if (!response.ok || !data.ok) {
+    const details = data.response_metadata?.messages?.join("; ");
+    throw new Error(
+      `Slack ${method}: ${data.error || response.status}${details ? ` (${details})` : ""}`,
+    );
+  }
   return data;
 }
 
