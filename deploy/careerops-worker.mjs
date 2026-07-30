@@ -112,14 +112,25 @@ async function processSlackEvents() {
   }
 
   for (const threadTs of Object.keys(state.threads)) {
-    const replies = await slack("conversations.replies", {
-      channel: env.channel,
-      ts: threadTs,
-      oldest: state.threads[threadTs] || "0",
-      inclusive: false,
-      limit: 100,
-    });
-    for (const reply of (replies.messages || []).slice(1)) {
+    let replies;
+    try {
+      replies = await slack("conversations.replies", {
+        channel: env.channel,
+        ts: threadTs,
+        limit: 100,
+      });
+    } catch (error) {
+      if (String(error.message).includes("invalid_arguments")) {
+        log(`dropping invalid Slack thread cursor: ${threadTs}`);
+        delete state.threads[threadTs];
+        await writeState();
+        continue;
+      }
+      throw error;
+    }
+    const cursor = state.threads[threadTs] || "0";
+    for (const reply of replies.messages || []) {
+      if (reply.ts === threadTs || Number(reply.ts) <= Number(cursor)) continue;
       state.threads[threadTs] = maxTs(state.threads[threadTs], reply.ts);
       if (reply.user === env.authorizedUser && !reply.subtype && !reply.bot_id) {
         await handleSlackMessage(reply, threadTs);
@@ -155,8 +166,7 @@ async function runEvent(event) {
     "exec",
     "--ephemeral",
     "--skip-git-repo-check",
-    "--sandbox", "workspace-write",
-    "--config", "sandbox_workspace_write.network_access=true",
+    "--dangerously-bypass-approvals-and-sandbox",
     "--output-schema", schemaPath,
     "--output-last-message", outputFile,
     "--cd", root,
@@ -240,7 +250,19 @@ async function readState() {
     return normalizeState(JSON.parse(await fs.readFile(env.stateFile, "utf8")));
   } catch (error) {
     if (error.code !== "ENOENT") throw error;
-    return normalizeState({});
+    try {
+      const legacy = JSON.parse(
+        await fs.readFile(path.join(root, "data/slack-listener-state.json"), "utf8"),
+      );
+      return normalizeState({
+        lastTopLevelTs: legacy.last_processed_user_message_ts || "0",
+      });
+    } catch (legacyError) {
+      if (legacyError.code !== "ENOENT") {
+        log(`ignoring unreadable legacy Slack state: ${legacyError.message}`);
+      }
+      return normalizeState({});
+    }
   }
 }
 
