@@ -1,4 +1,5 @@
 .git
+.github
 node_modules
 output
 batch/logs
@@ -9,8 +10,20 @@ jds/*
 !jds/.gitkeep
 reports/*.md
 .env
+.env.*
 .update-dismissed
 .update-lock
 *.log
 .DS_Store
 writing-samples
+.career-ops-web
+.playwright-mcp
+plan
+work
+cv.md
+tejaagent.md
+portals.yml
+config/profile.yml
+modes/_profile.md
+modes/_custom.md
+data/*

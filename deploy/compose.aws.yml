@@ -1,0 +1,28 @@
+services:
+  careerops:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.aws
+    image: careerops-aws:local
+    container_name: careerops
+    restart: unless-stopped
+    init: true
+    env_file:
+      - .env.aws
+    environment:
+      TZ: America/Chicago
+    volumes:
+      - ../data:/app/data
+      - ../output:/app/output
+      - ../reports:/app/reports
+      - ../jds:/app/jds
+      - ../config:/app/config
+      - ../modes:/app/modes
+      - ../cv.md:/app/cv.md
+      - ../tejaagent.md:/app/tejaagent.md
+      - ../portals.yml:/app/portals.yml
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "5"

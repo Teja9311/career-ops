@@ -1,0 +1,25 @@
+FROM mcr.microsoft.com/playwright:v1.62.0-jammy
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    NODE_ENV=production \
+    PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
+    TZ=America/Chicago
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates curl git tini \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY package.json ./
+RUN npm install --omit=dev --no-audit --no-fund \
+ && npm install --global --no-audit --no-fund @openai/codex
+
+COPY . .
+
+RUN mkdir -p data output reports jds \
+ && chown -R pwuser:pwuser /app
+
+USER pwuser
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["node", "deploy/careerops-worker.mjs"]
