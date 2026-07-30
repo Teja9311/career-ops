@@ -45,6 +45,8 @@ for (const [name, value] of [
   if (!value) throw new Error(`${name} is required`);
 }
 
+await authenticateCodex();
+
 let state = await readState();
 let running = false;
 
@@ -74,6 +76,17 @@ async function tick() {
   } finally {
     running = false;
   }
+}
+
+async function authenticateCodex() {
+  log("authenticating Codex with API key");
+  await runProcess(
+    "codex",
+    ["login", "--with-api-key"],
+    `${process.env.OPENAI_API_KEY}\n`,
+    30_000,
+  );
+  await runProcess("codex", ["login", "status"], "", 30_000);
 }
 
 async function processSlackEvents() {
