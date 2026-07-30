@@ -41,8 +41,15 @@ a rendered-page visual inspection before returning it. The page must be full and
 balanced, not sparse; body text must remain readable; bullets and wrapped lines
 must share consistent hanging indents; employer/date rows must align; and there
 must be no missing content, clipping, overlap, orphaned headings, or excessive
-blank space. If the locked content cannot fit legibly on one page, pause that
-role and ask the user rather than deleting content or shrinking it excessively.
+blank space. The user gives standing authorization for minimum formatting-only
+fit adjustments without a per-role question: small changes to margins, section
+and paragraph spacing, line height, bullet hanging indents, and employer/date
+alignment. Preserve the single-column structure, section order and names, font
+family, hierarchy, and overall appearance; keep body and bullet text at 10 pt or
+larger. Never delete protected content, condense or horizontally scale text, or
+permit clipping/overlap. If all protected content still cannot fit, mark that
+role NEEDS YOUR INPUT once with the concrete conflict; do not repeatedly ask for
+the same layout authorization and do not upload an incomplete resume.
 
 For a Slack event, answer every unhandled message from the authorized user.
 Keep role-specific replies in the supplied digest thread. Support DETAILS,
