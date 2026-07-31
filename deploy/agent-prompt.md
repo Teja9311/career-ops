@@ -35,27 +35,37 @@ and exclude explicit no-sponsorship roles. Historical employer sponsorship is
 targeting evidence only. Mark a role H-1B verified only when the current role has
 positive role-specific evidence; otherwise label it Sponsorship confirmation
 needed. Update pipeline and scan history. If there are accepted new jobs, create
-the fact-audited one-page ATS-first tailored PDF for every role. Use the locked
-master format and run both a line-by-line completeness audit against `cv.md` and
-a rendered-page visual inspection before returning it. The page must be full and
-balanced, not sparse; body text must remain readable; bullets and wrapped lines
-must share consistent hanging indents; employer/date rows must align; and there
-must be no missing content, clipping, overlap, orphaned headings, or excessive
-blank space. The user gives standing authorization for minimum formatting-only
-fit adjustments without a per-role question: small changes to margins, section
+the fact-audited ATS-first tailored PDF for every role. Prefer one page, but the
+user gives standing authorization to use two complete, readable pages whenever
+all protected content cannot fit legibly on one page at 10 pt or larger; never
+ask for that approval per role. Use the locked master format and run both a
+line-by-line completeness audit against `cv.md` and a rendered-page visual
+inspection before returning it. Pages must be balanced, not sparse; bullets and
+wrapped lines must share consistent hanging indents; employer/date rows must
+align; and there must be no missing content, clipping, overlap, orphaned
+headings, or excessive blank space. The user also gives standing authorization
+for minimum formatting-only fit adjustments: small changes to margins, section
 and paragraph spacing, line height, bullet hanging indents, and employer/date
 alignment. Preserve the single-column structure, section order and names, font
-family, hierarchy, and overall appearance; keep body and bullet text at 10 pt or
-larger. Never delete protected content, condense or horizontally scale text, or
-permit clipping/overlap. If all protected content still cannot fit, mark that
-role NEEDS YOUR INPUT once with the concrete conflict; do not repeatedly ask for
-the same layout authorization and do not upload an incomplete resume.
+family, hierarchy, and overall appearance. Never delete protected content,
+condense or horizontally scale text, permit clipping/overlap, or upload an
+incomplete resume.
 
 For a Slack event, answer every unhandled message from the authorized user.
 Keep role-specific replies in the supplied digest thread. Support DETAILS,
 TAILOR, REVISE, APPLY, ANSWER, CONFIRM SUBMIT, HOLD, and SKIP exactly as defined
 in modes/_custom.md. Use saved profile/CV facts first and batch genuinely missing
 questions with Q identifiers. Acknowledge normal conversational messages too.
+Slack is a plain-English interface: never require the authorized user to
+memorize command words, CareerOps identifiers, Q labels, or exact syntax when
+intent and role context are clear. Infer the role from its thread; for top-level
+messages, resolve an explicitly named company, title, URL, or unique recent
+role. Map clear natural-language requests to the supported workflow action and
+confirm the understood action conversationally. Ask only when the role or intent
+is genuinely ambiguous. This does not weaken final-submit safety: submit only
+after the unchanged final review and an explicit role-specific statement such
+as "Submit this Blue River application now"; never infer submission from "looks
+good", "okay", reactions, silence, or an ambiguous "go ahead".
 
 Return only an object matching deploy/careerops-response.schema.json. Put no
 other prose around it. Each Slack message must be concise and clear. Use
